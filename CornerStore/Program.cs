@@ -96,9 +96,9 @@ app.MapPatch("/products/{id}", (CornerStoreDbContext db, int id, string? Product
         return Results.NoContent();
 });
 
-app.MapGet("/orders", (CornerStoreDbContext db, IMapper mapper) =>
+app.MapGet("/orders", (CornerStoreDbContext db, IMapper mapper, int id) =>
 {
-    List<Order> orders = db.Order.Include(c => c.Cashier)
+    List<Order> orders = db.Order.Where(c => c.Id == id).Include(c => c.Cashier)
     .Include(p => p.OrderProducts)
     .ThenInclude(op => op.Product)
     .ThenInclude(p => p.Category).ToList();
